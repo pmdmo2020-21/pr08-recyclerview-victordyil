@@ -7,7 +7,7 @@ interface DataSource {
 
     fun getAllUsersOrderedByName(): LiveData<List<User>>
     fun insertUser(user: User)
-    fun updateUser(user: User)
+    fun updateUserOrInsert(user: User)
     fun deleteUser(user: User)
 
 }
