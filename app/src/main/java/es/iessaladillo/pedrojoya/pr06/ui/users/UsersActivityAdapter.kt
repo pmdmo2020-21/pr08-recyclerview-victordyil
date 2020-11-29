@@ -18,7 +18,6 @@ class UsersActivityAdapter : ListAdapter<User, UsersActivityAdapter.ViewHolder>(
 
     inner class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
         init {
-            //rama
             containerView.editButton.setOnClickListener {
                 onEditListener?.invoke(bindingAdapterPosition)
             }

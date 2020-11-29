@@ -24,6 +24,7 @@ const val EMAIL_EXTRA = "EMAIL_EXTRA"
 const val PHONE_EXTRA = "PHONE_EXTRA"
 const val ADDRESS_EXTRA = "ADDRESS_EXTRA"
 const val WEB_EXTRA = "WEB_EXTRA"
+const val USER_EXTRA ="USER_EXTRA"
 
 class UsersActivity : AppCompatActivity() {
     //Callers
@@ -107,16 +108,7 @@ class UsersActivity : AppCompatActivity() {
     private fun editUser(position: Int) {
         val user: User = listAdapter.currentList[position]
         viewModel.editingUser = user
-        var r = EditUserActivity.newIntent(this).putExtra(NAME_EXTRA, user.nombre)
-
-        if (user.nombre != null && user.email != null && user.phoneNumber != null) {
-            r.putExtra(NAME_EXTRA, user.nombre)
-                    .putExtra(EMAIL_EXTRA, user.email)
-                    .putExtra(PHONE_EXTRA, user.phoneNumber)
-                    .putExtra(IMAGE_EXTRA, user.photoUrl)
-            if (user.address != null) r.putExtra(ADDRESS_EXTRA, user.address)
-            if (user.web != null) r.putExtra(WEB_EXTRA, user.web)
-        }
+        var r = EditUserActivity.newIntent(this).putExtra(USER_EXTRA,user)
         editUser.launch(r)
     }
 
