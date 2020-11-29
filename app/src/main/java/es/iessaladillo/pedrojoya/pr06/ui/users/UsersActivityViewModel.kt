@@ -22,9 +22,7 @@ class UsersActivityViewModel(private val database: DataSource, private val appli
 
     fun editUser(user: User) = database.updateUserOrInsert(user)
 
-    fun createUser(name: String?, img: String?, email: String?, phone: String?, address: String?, web: String?) =
-            database.updateUserOrInsert(User(-1, name!!, email!!, phone!!, address ?: "", web
-                    ?: "", img!!))
+    fun createUser(user: User) = database.updateUserOrInsert(user)
 
 
 }

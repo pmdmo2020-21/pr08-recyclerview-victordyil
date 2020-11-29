@@ -18,26 +18,20 @@ import es.iessaladillo.pedrojoya.pr06.data.model.User
 //  de usuarios ordenada por nombre
 
 object Database : DataSource {
-    val url = "https://picsum.photos/id/200/400/300"
     private val users: MutableList<User> = emptyList<User>().toMutableList()
     private val usersLiveData: MutableLiveData<List<User>> = MutableLiveData(users.toList())
 
-    override fun getAllUsersOrderedByName(): LiveData<List<User>> {
-        updateLiveData()
-        return usersLiveData
-    }
+    override fun getAllUsersOrderedByName(): LiveData<List<User>> = usersLiveData
 
     override fun insertUser(user: User) {
-        var id = users.size.toLong() + 1
-        var u = user.copy(id = id)
-        users.add(u)
+        users.add(user.copy(id = (users.size.toLong() + 1)))
         updateLiveData()
     }
 
     override fun updateUserOrInsert(user: User) {
 
         if (user.id != -1L) {
-            var ind = users.indexOfFirst { it.id == user.id }
+            val ind = users.indexOfFirst { it.id == user.id }
             if (ind != -1) {
                 users[ind] = user
             } else {
@@ -57,11 +51,7 @@ object Database : DataSource {
         }
     }
 
-    private fun updateLiveData() {
-        usersLiveData.value = users.sortedBy {
-            it.nombre
-        }
-    }
+    private fun updateLiveData() = users.sortedBy(User::nombre).also { usersLiveData.value = it }
 
 
 }

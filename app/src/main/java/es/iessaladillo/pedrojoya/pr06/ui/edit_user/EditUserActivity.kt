@@ -16,13 +16,8 @@ import es.iessaladillo.pedrojoya.pr06.ui.users.USER_EXTRA
 import es.iessaladillo.pedrojoya.pr06.utils.loadUrl
 
 class EditUserActivity : AppCompatActivity() {
-    // TODO: Código de la actividad.
-    //  Ten en cuenta que la actividad debe recibir a través del intent
-    //  con el que es llamado el objeto User corresondiente
-    //  ...
 
     // NO TOCAR: Estos métodos gestionan el menú y su gestión
-
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.user, menu)
@@ -45,9 +40,7 @@ class EditUserActivity : AppCompatActivity() {
 
     // FIN NO TOCAR
 
-    private val binding: UserActivityBinding by lazy {
-        UserActivityBinding.inflate(layoutInflater)
-    }
+    private val binding: UserActivityBinding by lazy { UserActivityBinding.inflate(layoutInflater) }
     private val viewModel: EditUserViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,10 +52,7 @@ class EditUserActivity : AppCompatActivity() {
     }
 
     private fun getIntentData() {
-
-        if (intent != null) {
-            viewModel.user = intent.getParcelableExtra(USER_EXTRA)!!
-        }
+        if (intent != null) viewModel.user = intent.getParcelableExtra(USER_EXTRA)!!
         setupViews()
     }
 
@@ -76,9 +66,7 @@ class EditUserActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun newIntent(context: Context): Intent {
-            return Intent(context, EditUserActivity::class.java)
-        }
+        fun newIntent(context: Context): Intent = Intent(context, EditUserActivity::class.java)
     }
 
     private fun observarCambios() {
@@ -153,14 +141,10 @@ class EditUserActivity : AppCompatActivity() {
         }))
     }
 
-    private fun onSave() {
-        if (viewModel.user.nombre != "" && viewModel.user.email != "" && viewModel.user.phoneNumber != "") {
-            setResult(RESULT_OK, Intent().putExtra(USER_EXTRA, viewModel.user))
-            Toast.makeText(application, R.string.user_save, Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(application, R.string.user_invalid_data, Toast.LENGTH_LONG).show()
-        }
-
-    }
+    private fun onSave() =
+            if (viewModel.user.nombre != "" && viewModel.user.email != "" && viewModel.user.phoneNumber != "") {
+                setResult(RESULT_OK, Intent().putExtra(USER_EXTRA, viewModel.user))
+                Toast.makeText(application, R.string.user_save, Toast.LENGTH_SHORT).show()
+            } else Toast.makeText(application, R.string.user_invalid_data, Toast.LENGTH_LONG).show()
 
 }

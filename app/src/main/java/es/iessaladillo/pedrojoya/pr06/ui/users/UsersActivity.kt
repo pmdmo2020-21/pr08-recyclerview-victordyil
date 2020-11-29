@@ -10,7 +10,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import es.iessaladillo.pedrojoya.pr06.R
 import es.iessaladillo.pedrojoya.pr06.data.Database
 import es.iessaladillo.pedrojoya.pr06.data.model.User
@@ -18,12 +20,6 @@ import es.iessaladillo.pedrojoya.pr06.databinding.UsersActivityBinding
 import es.iessaladillo.pedrojoya.pr06.ui.add_user.AddUserActivity
 import es.iessaladillo.pedrojoya.pr06.ui.edit_user.EditUserActivity
 
-const val NAME_EXTRA = "NAME_EXTRA"
-const val IMAGE_EXTRA = "IMAGE_EXTRA"
-const val EMAIL_EXTRA = "EMAIL_EXTRA"
-const val PHONE_EXTRA = "PHONE_EXTRA"
-const val ADDRESS_EXTRA = "ADDRESS_EXTRA"
-const val WEB_EXTRA = "WEB_EXTRA"
 const val USER_EXTRA = "USER_EXTRA"
 
 class UsersActivity : AppCompatActivity() {
@@ -31,40 +27,28 @@ class UsersActivity : AppCompatActivity() {
     private val addUser: ActivityResultLauncher<Intent> =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                 val resultIntent = result.data
-                if (result.resultCode == RESULT_OK && resultIntent != null) {
-                    val name = resultIntent.getStringExtra(NAME_EXTRA)
-                    val img = resultIntent.getStringExtra(IMAGE_EXTRA)
-                    val email = resultIntent.getStringExtra(EMAIL_EXTRA)
-                    val phone = resultIntent.getStringExtra(PHONE_EXTRA)
-                    val address = resultIntent.getStringExtra(ADDRESS_EXTRA)
-                    val web = resultIntent.getStringExtra(WEB_EXTRA)
-
-                    viewModel.createUser(name, img, email, phone, address, web)
-                }
+                if (result.resultCode == RESULT_OK && resultIntent != null) viewModel.createUser(resultIntent.getParcelableExtra(USER_EXTRA)!!)
 
             }
     private val editUser: ActivityResultLauncher<Intent> =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                 val resultIntent = result.data
-                if (result.resultCode == RESULT_OK && resultIntent != null) {
-                    viewModel.editUser(resultIntent.getParcelableExtra(USER_EXTRA)!!)
-                }
+                if (result.resultCode == RESULT_OK && resultIntent != null) viewModel.editUser(resultIntent.getParcelableExtra(USER_EXTRA)!!)
+
             }
 
     //Variables
-    private val binding: UsersActivityBinding by lazy {
-        UsersActivityBinding.inflate(layoutInflater)
-    }
+    private val binding: UsersActivityBinding by lazy { UsersActivityBinding.inflate(layoutInflater) }
 
-    private val viewModel: UsersActivityViewModel by viewModels {
-        UsersActivityViewModelFactory(Database, application)
-    }
-    private val listAdapter: UsersActivityAdapter = UsersActivityAdapter().also {
-        it.onEditListener = { position ->
-            editUser(position)
-        }
-        it.onDeleteListener = { position ->
-            deleteUser(position)
+    private val viewModel: UsersActivityViewModel by viewModels { UsersActivityViewModelFactory(Database, application) }
+    private val listAdapter: UsersActivityAdapter by lazy {
+        UsersActivityAdapter().also {
+            it.onEditListener = { position ->
+                editUser(position)
+            }
+            it.onDeleteListener = { position ->
+                deleteUser(position)
+            }
         }
     }
 
@@ -99,10 +83,7 @@ class UsersActivity : AppCompatActivity() {
     }
 
     private fun editUser(position: Int) {
-        val user: User = listAdapter.currentList[position]
-        viewModel.editingUser = user
-        val r = EditUserActivity.newIntent(this).putExtra(USER_EXTRA, user)
-        editUser.launch(r)
+        editUser.launch(EditUserActivity.newIntent(this).putExtra(USER_EXTRA, listAdapter.currentList[position]))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -129,9 +110,9 @@ class UsersActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() = binding.lstUsers.run {
+       // layoutManager = GridLayoutManager(context, R.integer.users_grid_columns)
         adapter = listAdapter
         itemAnimator = DefaultItemAnimator()
         layoutManager = LinearLayoutManager(context)
-        //layoutManager = GridLayoutManager(context, R.integer.users_grid_columns, RecyclerView.HORIZONTAL, false)
     }
 }

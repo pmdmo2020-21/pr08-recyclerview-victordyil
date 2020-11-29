@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import es.iessaladillo.pedrojoya.pr06.R
 import es.iessaladillo.pedrojoya.pr06.data.Database
+import es.iessaladillo.pedrojoya.pr06.data.model.User
 import es.iessaladillo.pedrojoya.pr06.databinding.UserActivityBinding
 import es.iessaladillo.pedrojoya.pr06.databinding.UsersActivityBinding
 import es.iessaladillo.pedrojoya.pr06.ui.users.*
@@ -23,14 +24,9 @@ import kotlin.random.Random
 
 class AddUserActivity : AppCompatActivity() {
 
-    //Var
-    private val binding: UserActivityBinding by lazy {
-        UserActivityBinding.inflate(layoutInflater)
-    }
+    private val binding: UserActivityBinding by lazy { UserActivityBinding.inflate(layoutInflater) }
 
     private val viewModel: AddUserViewModel by viewModels()
-    // TODO: Código de la actividad.
-    //  ...
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,12 +36,12 @@ class AddUserActivity : AppCompatActivity() {
     }
 
     private fun setupViews() {
-        binding.imageProfile?.loadUrl(viewModel.image)
+        binding.imageProfile.loadUrl(viewModel.image)
         observarCambios()
     }
 
     private fun observarCambios() {
-        binding.editTextTextPersonName?.addTextChangedListener((object : TextWatcher {
+        binding.editTextTextPersonName.addTextChangedListener((object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
                 viewModel.nombre = s.toString()
             }
@@ -59,7 +55,7 @@ class AddUserActivity : AppCompatActivity() {
                                        before: Int, count: Int) {
             }
         }))
-        binding.editTextTextEmailAddress?.addTextChangedListener((object : TextWatcher {
+        binding.editTextTextEmailAddress.addTextChangedListener((object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
                 viewModel.email = s.toString()
             }
@@ -73,7 +69,7 @@ class AddUserActivity : AppCompatActivity() {
                                        before: Int, count: Int) {
             }
         }))
-        binding.editTextPhone?.addTextChangedListener((object : TextWatcher {
+        binding.editTextPhone.addTextChangedListener((object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
                 viewModel.phone = s.toString()
             }
@@ -87,7 +83,7 @@ class AddUserActivity : AppCompatActivity() {
                                        before: Int, count: Int) {
             }
         }))
-        binding.editTextTextPostalAddress?.addTextChangedListener((object : TextWatcher {
+        binding.editTextTextPostalAddress.addTextChangedListener((object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
                 viewModel.address = s.toString()
             }
@@ -101,7 +97,7 @@ class AddUserActivity : AppCompatActivity() {
                                        before: Int, count: Int) {
             }
         }))
-        binding.txtWeb?.addTextChangedListener((object : TextWatcher {
+        binding.txtWeb.addTextChangedListener((object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
                 viewModel.web = s.toString()
             }
@@ -137,22 +133,18 @@ class AddUserActivity : AppCompatActivity() {
 
     // FIN NO TOCAR
     companion object {
-        fun newIntent(context: Context): Intent {
-            return Intent(context, AddUserActivity::class.java)
-        }
+        fun newIntent(context: Context): Intent = Intent(context, AddUserActivity::class.java)
     }
 
     private fun onSave() {
         // TODO: Acciones a realizar al querer salvar
+
         if (viewModel.nombre != null && viewModel.nombre != "" && viewModel.email != null && viewModel.email != "" && viewModel.phone != null && viewModel.phone != "") {
-            var r = Intent().putExtra(NAME_EXTRA, viewModel.nombre)
-                    .putExtra(EMAIL_EXTRA, viewModel.email)
-                    .putExtra(PHONE_EXTRA, viewModel.phone.toString())
-                    .putExtra(IMAGE_EXTRA, viewModel.image)
-            if (viewModel.address != null) r.putExtra(ADDRESS_EXTRA, viewModel.address)
-            if (viewModel.web != null) r.putExtra(WEB_EXTRA, viewModel.web)
-            setResult(RESULT_OK, r)
+            viewModel.user = User(-1L, viewModel.nombre!!, viewModel.email!!, viewModel.phone!!, viewModel.address
+                    ?: "", viewModel.web ?: "", viewModel.image)
+            setResult(RESULT_OK, Intent().putExtra(USER_EXTRA, viewModel.user))
             Toast.makeText(application, R.string.user_save, Toast.LENGTH_SHORT).show()
+
         } else {
             Toast.makeText(application, R.string.user_invalid_data, Toast.LENGTH_LONG).show()
         }
