@@ -24,7 +24,7 @@ const val EMAIL_EXTRA = "EMAIL_EXTRA"
 const val PHONE_EXTRA = "PHONE_EXTRA"
 const val ADDRESS_EXTRA = "ADDRESS_EXTRA"
 const val WEB_EXTRA = "WEB_EXTRA"
-const val USER_EXTRA ="USER_EXTRA"
+const val USER_EXTRA = "USER_EXTRA"
 
 class UsersActivity : AppCompatActivity() {
     //Callers
@@ -32,12 +32,12 @@ class UsersActivity : AppCompatActivity() {
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                 val resultIntent = result.data
                 if (result.resultCode == RESULT_OK && resultIntent != null) {
-                    var name = resultIntent.getStringExtra(NAME_EXTRA)
-                    var img = resultIntent.getStringExtra(IMAGE_EXTRA)
-                    var email = resultIntent.getStringExtra(EMAIL_EXTRA)
-                    var phone = resultIntent.getStringExtra(PHONE_EXTRA)
-                    var address = resultIntent.getStringExtra(ADDRESS_EXTRA)
-                    var web = resultIntent.getStringExtra(WEB_EXTRA)
+                    val name = resultIntent.getStringExtra(NAME_EXTRA)
+                    val img = resultIntent.getStringExtra(IMAGE_EXTRA)
+                    val email = resultIntent.getStringExtra(EMAIL_EXTRA)
+                    val phone = resultIntent.getStringExtra(PHONE_EXTRA)
+                    val address = resultIntent.getStringExtra(ADDRESS_EXTRA)
+                    val web = resultIntent.getStringExtra(WEB_EXTRA)
 
                     viewModel.createUser(name, img, email, phone, address, web)
                 }
@@ -47,14 +47,7 @@ class UsersActivity : AppCompatActivity() {
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                 val resultIntent = result.data
                 if (result.resultCode == RESULT_OK && resultIntent != null) {
-                    var name = resultIntent.getStringExtra(NAME_EXTRA)
-                    var img = resultIntent.getStringExtra(IMAGE_EXTRA)
-                    var email = resultIntent.getStringExtra(EMAIL_EXTRA)
-                    var phone = resultIntent.getStringExtra(PHONE_EXTRA)
-                    var address = resultIntent.getStringExtra(ADDRESS_EXTRA)
-                    var web = resultIntent.getStringExtra(WEB_EXTRA)
-                    viewModel.editUser(viewModel.editingUser.copy(nombre = name!!, email = email!!, phoneNumber = phone!!, address = address
-                            ?: "", web = web ?: "", photoUrl = img!!))
+                    viewModel.editUser(resultIntent.getParcelableExtra(USER_EXTRA)!!)
                 }
             }
 
@@ -97,7 +90,7 @@ class UsersActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun onAddUser() = addUser.launch(AddUserActivity.newIntent(this))
+    private fun onAddUser() = addUser.launch(AddUserActivity.newIntent(this))
 
 
     private fun deleteUser(position: Int) {
@@ -108,7 +101,7 @@ class UsersActivity : AppCompatActivity() {
     private fun editUser(position: Int) {
         val user: User = listAdapter.currentList[position]
         viewModel.editingUser = user
-        var r = EditUserActivity.newIntent(this).putExtra(USER_EXTRA,user)
+        val r = EditUserActivity.newIntent(this).putExtra(USER_EXTRA, user)
         editUser.launch(r)
     }
 

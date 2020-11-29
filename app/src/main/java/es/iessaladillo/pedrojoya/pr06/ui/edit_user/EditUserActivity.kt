@@ -72,6 +72,7 @@ class EditUserActivity : AppCompatActivity() {
         binding.editTextTextEmailAddress.setText(viewModel.user.email)
         binding.editTextPhone.setText(viewModel.user.phoneNumber)
         binding.editTextTextPostalAddress.setText(viewModel.user.address)
+        binding.txtWeb.setText(viewModel.user.web)
     }
 
     companion object {
@@ -144,7 +145,6 @@ class EditUserActivity : AppCompatActivity() {
 
             override fun beforeTextChanged(s: CharSequence, start: Int,
                                            count: Int, after: Int) {
-
             }
 
             override fun onTextChanged(s: CharSequence, start: Int,
