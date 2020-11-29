@@ -110,9 +110,9 @@ class UsersActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() = binding.lstUsers.run {
-       // layoutManager = GridLayoutManager(context, R.integer.users_grid_columns)
+        layoutManager = GridLayoutManager(context, resources.getInteger(R.integer.users_grid_columns), RecyclerView.VERTICAL, false)
         adapter = listAdapter
         itemAnimator = DefaultItemAnimator()
-        layoutManager = LinearLayoutManager(context)
+        // layoutManager = LinearLayoutManager(context)
     }
 }

@@ -12,8 +12,6 @@ import es.iessaladillo.pedrojoya.pr06.data.model.User
 //  Crear clase UsersActivityViewModel
 class UsersActivityViewModel(private val database: DataSource, private val application: Application) : ViewModel() {
 
-    lateinit var editingUser: User
-
     var users: LiveData<List<User>> = database.getAllUsersOrderedByName()
 
     val lblEmptyViewVisibility: LiveData<Int> = users.map { if (it.isEmpty()) View.VISIBLE else View.INVISIBLE }
