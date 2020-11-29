@@ -12,13 +12,9 @@ import java.util.concurrent.TimeUnit
 
 class EditUserViewModel: ViewModel() {
 
-    var name: String? = null
-    var email: String? = null
-    var phone: String? = null
-    var address: String? = null
-    var web: String? = null
+    lateinit var user: User
     private val random: Random = Random()
-    var image:String = getRandomPhotoUrl()
+
     // Para obtener un URL de foto de forma aleatoria (tendrás que definir
     // e inicializar el random a nivel de clase.
     private fun getRandomPhotoUrl(): String =
