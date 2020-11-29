@@ -1,5 +1,7 @@
 package es.iessaladillo.pedrojoya.pr06.data
 
+import android.util.Log
+import android.util.LogPrinter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
@@ -16,30 +18,50 @@ import es.iessaladillo.pedrojoya.pr06.data.model.User
 //  de usuarios ordenada por nombre
 
 object Database : DataSource {
-    private val userList = mutableListOf<User>()
-    private val _userLive: MutableLiveData<List<User>> = MutableLiveData(userList.toList())
-    private val userLive: LiveData<List<User>>
-        get() = _userLive
+    val url = "https://picsum.photos/id/200/400/300"
+    private val users: MutableList<User> = emptyList<User>().toMutableList()
+    private val usersLiveData: MutableLiveData<List<User>> = MutableLiveData(users.toList())
 
     override fun getAllUsersOrderedByName(): LiveData<List<User>> {
-        return userLive
+        updateLiveData()
+        return usersLiveData
     }
 
     override fun insertUser(user: User) {
-        userList.add(user)
+        var id = users.size.toLong() + 1
+        var u = user.copy(id = id)
+        users.add(u)
+        updateLiveData()
     }
 
     override fun updateUserOrInsert(user: User) {
-        var ind = userList.indexOfFirst { it.id.equals(user.id) }
-        if (ind != -1) {
-            userList[ind] = user
+
+        if (user.id != -1L) {
+            var ind = users.indexOfFirst { it.id == user.id }
+            if (ind != -1) {
+                users[ind] = user
+            } else {
+                insertUser(user)
+            }
         } else {
             insertUser(user)
         }
+        updateLiveData()
     }
 
     override fun deleteUser(user: User) {
-        userList.remove(user)
+        val position = users.indexOfFirst { it.id == user.id }
+        if (position >= 0) {
+            users.removeAt(position)
+            updateLiveData()
+        }
     }
+
+    private fun updateLiveData() {
+        usersLiveData.value = users.sortedBy {
+            it.nombre
+        }
+    }
+
 
 }
