@@ -12,6 +12,7 @@ import kotlin.random.Random
 
 class AddUserViewModel() : ViewModel() {
     private val random: Random = Random(System.currentTimeMillis())
+    lateinit var user:User
     var nombre: String? = null
     var email: String? = null
     var phone: String? = null
@@ -19,8 +20,6 @@ class AddUserViewModel() : ViewModel() {
     var web: String? = null
     val image: String = getRandomPhotoUrl()
 
-    // Para obtener un URL de foto de forma aleatoria (tendrás que definir
-    // e inicializar el random a nivel de clase.
     private fun getRandomPhotoUrl(): String =
             "https://picsum.photos/id/${random.nextInt(100)}/400/300"
 
